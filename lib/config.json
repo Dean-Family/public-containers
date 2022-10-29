@@ -1,0 +1,7 @@
+{
+  "generalName": "Al2DevEnv",
+  "generalDescription": "A development environment container based on Amazon Linux 2",
+  "dashedName": "al2-dev-env",
+  "account": "822585835475",
+  "region": "us-west-2"
+}

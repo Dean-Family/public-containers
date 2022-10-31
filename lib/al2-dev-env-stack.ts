@@ -1,6 +1,20 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Config } from '../lib/config';
+import {StageProps} from 'aws-cdk-lib';
+
+class ImagePipelineStack extends cdk.Stack {
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
+  }
+}
+
+class ImagePipelineStage extends cdk.Stage {
+  constructor(scope: Construct, id: string, props?: StageProps) {
+    super(scope, id, props);
+    const stack = new ImagePipelineStack(this, "temp");
+  }
+}
 export class Al2DevEnvStack extends cdk.Stack {
   constructor(scope: Construct, id: string, config: Config, props?: cdk.StackProps) { super(scope, id, props);
     
@@ -16,5 +30,6 @@ export class Al2DevEnvStack extends cdk.Stack {
         ]
       })
     })
+    pipeline.addStage(new ImagePipelineStage(this, "temp"));
   }
 }

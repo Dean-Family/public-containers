@@ -3,5 +3,9 @@
   "generalDescription": "A development environment container based on Amazon Linux 2",
   "dashedName": "al2-dev-env",
   "account": "822585835475",
-  "region": "us-west-2"
+  "region": "us-west-2",
+  "platform": "Linux",
+  "parentImage": "public.ecr.aws/amazonlinux/amazonlinux:latest",
+  "toolsComponentVersion": "1.0.00",
+  "containerRecipeVersion": "1.0.00"
 }

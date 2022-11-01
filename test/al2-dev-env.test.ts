@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import * as Al2DevEnv from '../lib/al2-dev-env-stack';
 import { Config } from '../lib/config';
+import * as fs from 'fs';
 
 let config: Config = require('../lib/config.json');
 
@@ -37,5 +38,17 @@ test('Image Pipeline Stack Created', () => {
      role: roleStack.role
    });
    const template = Template.fromStack(stack);
+	 const toolsComponentAwsToe = fs.readFileSync('tools/tools.yml', "utf-8")
+
+   // template.hasResourceProperties("AWS::ECR::Repository",{
+   //   Name: config.generalName.concat("ElasticContainerRepository")
+   // })
+   template.hasResourceProperties("AWS::ImageBuilder::Component", {
+     Name: config.generalName.concat("ToolsComponent"),
+     Platform: config.platform,
+     Version: config.toolsComponentVersion,
+     Data: toolsComponentAwsToe,
+     Description: config.generalDescription
+   })
 
 });

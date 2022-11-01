@@ -48,7 +48,7 @@ export class ImagePipelineStack extends cdk.Stack {
       description: config.generalDescription,
       name: config.dashedName,
       parentImage: config.parentImage,
-      targetRepository: { repositoryName: ecRepo.repositoryName },
+      targetRepository: { repositoryName: ecRepo.repositoryName, service: "ECR" },
       version: config.containerRecipeVersion
     });
     cfnContainerRecipe.node.addDependency(cfnComponent);
@@ -68,7 +68,7 @@ export class ImagePipelineStack extends cdk.Stack {
         region: config.region,
         containerDistributionConfiguration: {
           description: config.generalDescription,
-          targetRepository: { repositoryName: ecRepo.repositoryName }
+          targetRepository: { repositoryName: ecRepo.repositoryName, service: "ECR" }
         }
       }],
       name: config.generalName.concat("DistributionConfiguration"),

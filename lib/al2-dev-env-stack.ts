@@ -46,7 +46,7 @@ export class ImagePipelineStack extends cdk.Stack {
       components: [{
         componentArn: cfnComponent.attrArn,
       }],
-      containerType: "Docker",
+      containerType: "DOCKER",
       description: config.generalDescription,
       name: config.dashedName,
       parentImage: config.parentImage,

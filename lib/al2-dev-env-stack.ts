@@ -31,7 +31,9 @@ interface ImagePipelineStackProps {
 export class ImagePipelineStack extends cdk.Stack {
   constructor(scope: Construct, id: string, config: Config, props: ImagePipelineStackProps) {
     super(scope, id);
-    const ecRepo = new aws_ecr.Repository(this, config.generalName.concat("ElasticContainerRepository"))
+    const ecRepo = new aws_ecr.Repository(this, config.generalName.concat("ElasticContainerRepository"), {
+      imageScanOnPush: true,
+    })
 		const toolsComponentAwsToe = fs.readFileSync('tools/tools.yml', "utf-8")
     const cfnComponent = new imagebuilder.CfnComponent(this, config.generalName.concat("ToolsComponent"), {
       name: config.generalName.concat("ToolsComponent"),

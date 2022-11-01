@@ -40,9 +40,11 @@ test('Image Pipeline Stack Created', () => {
    const template = Template.fromStack(stack);
 	 const toolsComponentAwsToe = fs.readFileSync('tools/tools.yml', "utf-8")
 
-   // template.hasResourceProperties("AWS::ECR::Repository",{
-   //   Name: config.generalName.concat("ElasticContainerRepository")
-   // })
+   console.log(template.toJSON());
+
+   template.hasResourceProperties("AWS::ECR::Repository",{
+     ImageScanningConfiguration: { "ScanOnPush": true}
+   })
    template.hasResourceProperties("AWS::ImageBuilder::Component", {
      Name: config.generalName.concat("ToolsComponent"),
      Platform: config.platform,

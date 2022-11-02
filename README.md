@@ -1,8 +1,8 @@
-# Welcome to your CDK TypeScript project
+# Public Containers
 
-This is a blank project for CDK development with TypeScript.
+This project seeks to use the AWS CDK to facilitate using AWS Image Builder to build images that can be served out of the Amazon Public Container Gallery. 
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+Currently this is a work in progress and has no containers being built or served.
 
 ## Useful commands
 

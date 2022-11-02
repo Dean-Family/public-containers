@@ -65,13 +65,17 @@ export class ImagePipelineStack extends cdk.Stack {
       description: config.generalDescription,
     });
     cfnInfrastructureConfiguration.node.addDependency(cfnInstanceProfile);
+    const cfnContainerDistribution : imagebuilder.CfnDistributionConfiguration.ContainerDistributionConfigurationProperty = {
+        description: config.generalDescription,
+        targetRepository: {
+          repositoryName: ecRepo.repositoryName,
+          service: 'ECR'
+        }
+      }
     const cfnDistributionConfiguration = new imagebuilder.CfnDistributionConfiguration(this, config.generalName.concat("DistributionConfiguration"), {
       distributions: [{
         region: config.region,
-        containerDistributionConfiguration: {
-          description: config.generalDescription,
-          targetRepository: { repositoryName: ecRepo.repositoryName, service: "ECR" }
-        }
+        containerDistributionConfiguration: cfnContainerDistribution
       }],
       name: config.generalName.concat("DistributionConfiguration"),
       description: config.generalDescription,

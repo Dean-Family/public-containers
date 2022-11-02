@@ -5,6 +5,7 @@ import {StageProps} from 'aws-cdk-lib';
 import { aws_imagebuilder as imagebuilder, aws_ec2 as ec2, aws_iam as iam, aws_ecr } from 'aws-cdk-lib';
 import * as fs from 'fs';
 import {SubnetType, SecurityGroup} from 'aws-cdk-lib/aws-ec2';
+import {ManagedPolicy} from 'aws-cdk-lib/aws-iam';
 
 
 // Creates VPC Stack Class
@@ -32,8 +33,12 @@ export class RoleStack extends cdk.Stack {
   constructor(scope: Construct, id: string, config: Config) {
     super(scope, id);
     this.role = new iam.Role(this, config.generalName.concat("ImagePipelineRole"), {
-      assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com")
+      assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
     });
+    this.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("EC2InstanceProfileForImageBuilder"));
+    this.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("EC2InstanceProfileForImageBuilderECRContainerBuilds"));
+    this.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore"));
+
   }
 }
 

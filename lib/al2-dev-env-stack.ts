@@ -69,9 +69,14 @@ export class ImagePipelineStack extends cdk.Stack {
   constructor(scope: Construct, id: string, config: Config, props: ImagePipelineStackProps) {
     super(scope, id);
     // Sets up Container Repository to put the images
-    const ecRepo = new aws_ecr.Repository(this, config.generalName.concat("ElasticContainerRepository"), {
-      imageScanOnPush: true,
-    })
+    // This would setup a private repo
+    //const ecRepo = new aws_ecr.Repository(this, config.generalName.concat("ElasticContainerRepository"), {
+    //  imageScanOnPush: true,
+    //})
+    // This sets up a public repo
+    const ecRepo = new aws_ecr.CfnPublicRepository(this, config.generalName.concat("PublicRepository"), {
+      repositoryName: config.generalName.concat("PublicRepository"),
+    });
     // Reads AWSTOE doc from file
 		const toolsComponentAwsToe = fs.readFileSync('tools/tools.yml', "utf-8")
     // Make sure that if you update this to update the version in the config
@@ -117,6 +122,7 @@ export class ImagePipelineStack extends cdk.Stack {
           service: 'ECR'
         }
       }
+    cfnInfrastructureConfiguration.node.addDependency(ecRepo);
     const cfnDistributionConfiguration = new imagebuilder.CfnDistributionConfiguration(this, config.generalName.concat("DistributionConfiguration"), {
       distributions: [{
         region: config.region,

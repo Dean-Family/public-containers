@@ -4,7 +4,7 @@ import { Config } from '../lib/config';
 import {StageProps} from 'aws-cdk-lib';
 import { aws_imagebuilder as imagebuilder, aws_ec2 as ec2, aws_iam as iam, aws_ecr } from 'aws-cdk-lib';
 import * as fs from 'fs';
-import {DefaultInstanceTenancy} from 'aws-cdk-lib/aws-ec2';
+import {SubnetType} from 'aws-cdk-lib/aws-ec2';
 
 
 // Creates VPC Stack Class
@@ -15,7 +15,13 @@ export class VpcStack extends cdk.Stack {
     super(scope, id);
     this.vpc = new ec2.Vpc(this, config.generalName.concat("Vpc"), {
       ipAddresses: ec2.IpAddresses.cidr("10.0.0.0/16"),
-      defaultInstanceTenancy: ec2.DefaultInstanceTenancy.DEFAULT
+      subnetConfiguration: [{
+        name: config.generalName.concat("PrivateSubnet"),
+        subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
+      },{
+        name: config.generalName.concat("PublicSubnet"),
+        subnetType: ec2.SubnetType.PUBLIC
+      }]
     })
   }
 }
@@ -79,6 +85,7 @@ export class ImagePipelineStack extends cdk.Stack {
       instanceProfileName: config.generalName.concat("InstanceProfile"),
       name: config.generalName.concat("InstanceProfile"),
       description: config.generalDescription,
+      subnetId: props.vpc.privateSubnets[0].subnetId
     });
     cfnInfrastructureConfiguration.node.addDependency(cfnInstanceProfile);
     const cfnContainerDistribution : imagebuilder.CfnDistributionConfiguration.ContainerDistributionConfigurationProperty = {

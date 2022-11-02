@@ -120,6 +120,6 @@ export class Al2DevEnvStack extends cdk.Stack {
         ]
       })
     })
-    pipeline.addStage(new ImagePipelineStage(this, "temp", config));
+    pipeline.addStage(new ImagePipelineStage(this, config.generalName.concat("ImagePipelineStage"), config));
   }
 }

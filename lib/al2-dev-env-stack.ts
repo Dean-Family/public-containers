@@ -51,7 +51,8 @@ export class ImagePipelineStack extends cdk.Stack {
       name: config.dashedName,
       parentImage: config.parentImage,
       targetRepository: { repositoryName: ecRepo.repositoryName, service: "ECR" },
-      version: config.containerRecipeVersion
+      version: config.containerRecipeVersion,
+      dockerfileTemplateData: fs.readFileSync('tools/Dockerfile', "utf-8")
     });
     cfnContainerRecipe.node.addDependency(cfnComponent);
     cfnContainerRecipe.node.addDependency(ecRepo);

@@ -29,18 +29,25 @@ test('Role Stack Exists', () => {
    const template = Template.fromStack(stack);
 
 });
+test('Security Group Stack Exists', () => {
+   const app = new cdk.App();
+   const vpcStack = new Al2DevEnv.VpcStack(app, 'MyVPCStack', config);
+   const stack = new Al2DevEnv.SecurityGroupStack(app, 'MySecurityGroupStack', config, { vpc: vpcStack.vpc });
+   const template = Template.fromStack(stack);
+
+});
 test('Image Pipeline Stack Created', () => {
    const app = new cdk.App();
    const vpcStack = new Al2DevEnv.VpcStack(app, 'MyVPCStack', config);
    const roleStack = new Al2DevEnv.RoleStack(app, 'MyRoleStack', config);
+   const securityGroupStack = new Al2DevEnv.SecurityGroupStack(app, 'MySecurityGroupStack', config, { vpc: vpcStack.vpc });
    const stack = new Al2DevEnv.ImagePipelineStack(app, 'MyImagePipelineStack', config, {
      vpc: vpcStack.vpc,
-     role: roleStack.role
+     role: roleStack.role,
+     securityGroup: securityGroupStack.securityGroup
    });
    const template = Template.fromStack(stack);
 	 const toolsComponentAwsToe = fs.readFileSync('tools/tools.yml', "utf-8")
-
-   console.log(template.toJSON());
 
    template.hasResourceProperties("AWS::ECR::Repository",{
      ImageScanningConfiguration: { "ScanOnPush": true}

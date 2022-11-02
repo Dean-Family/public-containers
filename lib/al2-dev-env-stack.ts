@@ -4,7 +4,7 @@ import { Config } from '../lib/config';
 import {StageProps} from 'aws-cdk-lib';
 import { aws_imagebuilder as imagebuilder, aws_ec2 as ec2, aws_iam as iam, aws_ecr } from 'aws-cdk-lib';
 import * as fs from 'fs';
-import {SubnetType} from 'aws-cdk-lib/aws-ec2';
+import {SubnetType, SecurityGroup} from 'aws-cdk-lib/aws-ec2';
 
 
 // Creates VPC Stack Class
@@ -37,10 +37,26 @@ export class RoleStack extends cdk.Stack {
   }
 }
 
+// Creates Security Group Stack Class
+//
+interface SecurityGroupStackProps {
+  readonly vpc: ec2.Vpc;
+}
+export class SecurityGroupStack extends cdk.Stack {
+  public readonly securityGroup: ec2.SecurityGroup;
+  constructor(scope: Construct, id: string, config: Config, props: SecurityGroupStackProps) {
+    super(scope, id);
+    this.securityGroup = new SecurityGroup(this, config.generalName.concat("SecurityGroup"), {
+      vpc: props.vpc,
+    });
+  }
+}
+
 // Takes info from previous stacks
 interface ImagePipelineStackProps {
   readonly vpc: ec2.Vpc;
   readonly role: iam.Role;
+  readonly securityGroup: ec2.SecurityGroup;
 }
 // Creates Role Stack Class
 //
@@ -85,6 +101,7 @@ export class ImagePipelineStack extends cdk.Stack {
       instanceProfileName: config.generalName.concat("InstanceProfile"),
       name: config.generalName.concat("InstanceProfile"),
       description: config.generalDescription,
+      securityGroupIds: [props.securityGroup.securityGroupId],
       subnetId: props.vpc.privateSubnets[0].subnetId
     });
     cfnInfrastructureConfiguration.node.addDependency(cfnInstanceProfile);
@@ -122,9 +139,13 @@ export class ImagePipelineStage extends cdk.Stage {
     super(scope, id, props);
     const vpcStack = new VpcStack(this, config.generalName.concat("VpcStack"), config);
     const roleStack = new RoleStack(this, config.generalName.concat("RoleStack"), config);
+    const securityGroupStack = new SecurityGroupStack(this, config.generalName.concat("SecurityGroupStack"), config,{
+      vpc: vpcStack.vpc
+    });
     const imagePipelineStack = new ImagePipelineStack(this, config.generalName.concat("ImagePipelineStack"), config, {
       vpc: vpcStack.vpc,
-      role: roleStack.role
+      role: roleStack.role,
+      securityGroup: securityGroupStack.securityGroup
     });
   }
 }

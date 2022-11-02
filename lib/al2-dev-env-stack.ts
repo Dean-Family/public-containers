@@ -5,6 +5,9 @@ import {StageProps} from 'aws-cdk-lib';
 import { aws_imagebuilder as imagebuilder, aws_ec2 as ec2, aws_iam as iam, aws_ecr } from 'aws-cdk-lib';
 import * as fs from 'fs';
 
+
+// Creates VPC Stack Class
+//
 export class VpcStack extends cdk.Stack {
   public readonly vpc: ec2.Vpc;
   constructor(scope: Construct, id: string, config: Config) {
@@ -14,6 +17,8 @@ export class VpcStack extends cdk.Stack {
     })
   }
 }
+// Creates Role Stack Class
+//
 export class RoleStack extends cdk.Stack {
   public readonly role: iam.Role;
   constructor(scope: Construct, id: string, config: Config) {
@@ -24,17 +29,23 @@ export class RoleStack extends cdk.Stack {
   }
 }
 
+// Takes info from previous stacks
 interface ImagePipelineStackProps {
   readonly vpc: ec2.Vpc;
   readonly role: iam.Role;
 }
+// Creates Role Stack Class
+//
 export class ImagePipelineStack extends cdk.Stack {
   constructor(scope: Construct, id: string, config: Config, props: ImagePipelineStackProps) {
     super(scope, id);
+    // Sets up Container Repository to put the images
     const ecRepo = new aws_ecr.Repository(this, config.generalName.concat("ElasticContainerRepository"), {
       imageScanOnPush: true,
     })
+    // Reads AWSTOE doc from file
 		const toolsComponentAwsToe = fs.readFileSync('tools/tools.yml', "utf-8")
+    // Make sure that if you update this to update the version in the config
     const cfnComponent = new imagebuilder.CfnComponent(this, config.generalName.concat("ToolsComponent"), {
       name: config.generalName.concat("ToolsComponent"),
       platform: config.platform,
@@ -42,6 +53,7 @@ export class ImagePipelineStack extends cdk.Stack {
       data: toolsComponentAwsToe,
       description: config.generalDescription
     });
+    // Make sure that if you update this to update the version in the config
     const cfnContainerRecipe = new imagebuilder.CfnContainerRecipe(this, config.generalName.concat("ContainerRecipe"), {
       components: [{
         componentArn: cfnComponent.attrArn,
@@ -56,6 +68,7 @@ export class ImagePipelineStack extends cdk.Stack {
     });
     cfnContainerRecipe.node.addDependency(cfnComponent);
     cfnContainerRecipe.node.addDependency(ecRepo);
+    // Profile used by the EC2 Instances that are building the images
     const cfnInstanceProfile = new iam.CfnInstanceProfile(this, config.generalName.concat("InstanceProfile"), {
       roles: [props.role.roleName],
       instanceProfileName: config.generalName.concat("InstanceProfile")

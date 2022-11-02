@@ -4,6 +4,7 @@ import { Config } from '../lib/config';
 import {StageProps} from 'aws-cdk-lib';
 import { aws_imagebuilder as imagebuilder, aws_ec2 as ec2, aws_iam as iam, aws_ecr } from 'aws-cdk-lib';
 import * as fs from 'fs';
+import {DefaultInstanceTenancy} from 'aws-cdk-lib/aws-ec2';
 
 
 // Creates VPC Stack Class
@@ -13,7 +14,8 @@ export class VpcStack extends cdk.Stack {
   constructor(scope: Construct, id: string, config: Config) {
     super(scope, id);
     this.vpc = new ec2.Vpc(this, config.generalName.concat("Vpc"), {
-      ipAddresses: ec2.IpAddresses.cidr("10.0.0.0/16")
+      ipAddresses: ec2.IpAddresses.cidr("10.0.0.0/16"),
+      defaultInstanceTenancy: ec2.DefaultInstanceTenancy.DEFAULT
     })
   }
 }

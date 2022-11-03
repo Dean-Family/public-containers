@@ -74,7 +74,10 @@ export class ImagePipelineStack extends cdk.Stack {
     //  imageScanOnPush: true,
     //})
     // This sets up a public repo
-    const ecRepo = new aws_ecr.CfnPublicRepository(this, config.generalName.concat("PublicRepository"), {
+    const cfnPublicRepository = new aws_ecr.CfnPublicRepository(this, config.generalName.concat("PublicRepository"), {
+      repositoryName: config.dashedName.concat("-public"),
+    });
+    const ecRepo = new aws_ecr.Repository(this, config.generalName.concat("PrivateRepository"), {
       repositoryName: config.dashedName,
     });
     // Reads AWSTOE doc from file

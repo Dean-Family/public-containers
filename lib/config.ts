@@ -5,6 +5,7 @@ export interface Config
   dashedName: string;
   account: string;
   region: string;
+  connectionArn: string;
   platform: string;
   toolsComponentVersion: string;
   containerRecipeVersion: string;

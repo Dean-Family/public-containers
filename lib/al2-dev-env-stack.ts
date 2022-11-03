@@ -75,7 +75,7 @@ export class ImagePipelineStack extends cdk.Stack {
     //})
     // This sets up a public repo
     const ecRepo = new aws_ecr.CfnPublicRepository(this, config.generalName.concat("PublicRepository"), {
-      repositoryName: config.generalName.concat("PublicRepository"),
+      repositoryName: config.dashedName,
     });
     // Reads AWSTOE doc from file
 		const toolsComponentAwsToe = fs.readFileSync('tools/tools.yml', "utf-8")

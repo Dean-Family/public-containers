@@ -100,6 +100,7 @@ export class ImagePipelineStack extends cdk.Stack {
       description: config.generalDescription,
       name: config.dashedName,
       parentImage: config.parentImage,
+      platformOverride: "Linux",
       targetRepository: { repositoryName: ecRepo.repositoryName, service: "ECR" },
       version: config.containerRecipeVersion,
       dockerfileTemplateData: fs.readFileSync('tools/Dockerfile', "utf-8")

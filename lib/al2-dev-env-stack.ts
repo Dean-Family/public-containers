@@ -136,11 +136,8 @@ export class ImagePipelineStack extends cdk.Stack {
     const cfnDistributionConfiguration = new imagebuilder.CfnDistributionConfiguration(this, config.generalName.concat("DistributionConfiguration"), {
       distributions: [{
         region: config.region,
-        containerDistributionConfiguration: cfnContainerDistribution
-      },{
-        region: config.region,
-        containerDistributionConfiguration: cfnContainerDistribution
-       }],
+        containerDistributionConfiguration: cfnPublicContainerDistribution
+      }],
       name: config.generalName.concat("DistributionConfiguration"),
       description: config.generalDescription,
     });

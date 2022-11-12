@@ -8,5 +8,5 @@
   "platform": "Linux",
   "parentImage": "public.ecr.aws/codebuild/amazonlinux2-x86_64-standard:4.0",
   "toolsComponentVersion": "1.0.00",
-  "containerRecipeVersion": "1.0.00"
+  "containerRecipeVersion": "1.0.01"
 }

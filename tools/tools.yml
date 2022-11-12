@@ -10,11 +10,3 @@ phases:
           commands:
             - echo 'Hello World from the build phase.'
             - yum install pandoc tmux -y
-  - name: validate
-    steps:
-      - name: Validate
-        action: ExecuteBash
-        inputs:
-          commands:
-            - pandoc --version
-            - tmux --version

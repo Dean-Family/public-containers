@@ -35,6 +35,7 @@ export class RoleStack extends cdk.Stack {
     this.role = new iam.Role(this, config.generalName.concat("ImagePipelineRole"), {
       assumedBy: new iam.ServicePrincipal("ec2.amazonaws.com"),
     });
+    aws_ecr.PublicGalleryAuthorizationToken.grantRead(this.role.grantPrincipal);
     this.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("EC2InstanceProfileForImageBuilder"));
     this.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("EC2InstanceProfileForImageBuilderECRContainerBuilds"));
     this.role.addManagedPolicy(ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore"));

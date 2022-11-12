@@ -4,7 +4,7 @@
   "dashedName": "al2-dev-env",
   "account": "661102537474",
   "region": "us-east-1",
-  "connectionArn": "arn:aws:codestar-connections:us-east-1:661102537474:connection/6f81729b-8340-41f9-b436-8f479fa51bc1",
+  "connectionArn": "public.ecr.aws/codebuild/amazonlinux2-x86_64-standard:4.0",
   "platform": "Linux",
   "parentImage": "amazonlinux:latest",
   "toolsComponentVersion": "1.0.00",

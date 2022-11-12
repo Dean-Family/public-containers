@@ -137,7 +137,10 @@ export class ImagePipelineStack extends cdk.Stack {
       distributions: [{
         region: config.region,
         containerDistributionConfiguration: cfnContainerDistribution
-      }],
+      },{
+        region: config.region,
+        containerDistributionConfiguration: cfnContainerDistribution
+       }],
       name: config.generalName.concat("DistributionConfiguration"),
       description: config.generalDescription,
     });

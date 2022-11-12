@@ -1,25 +1,20 @@
-name: Hello World
-description: This is hello world testing document for Linux.
+name: Install fun tools
+description: This is to install tools that I like to have in a container
 schemaVersion: 1.0
 phases:
   - name: build
     steps:
-      - name: HelloWorldStep
+      - name: Install things
         action: ExecuteBash
         inputs:
           commands:
             - echo 'Hello World from the build phase.'
+            - yum install pandoc tmux -y
   - name: validate
     steps:
-      - name: HelloWorldStep
+      - name: Validate
         action: ExecuteBash
         inputs:
           commands:
-            - echo 'Hello World from the validate phase.'
-  - name: test
-    steps:
-      - name: HelloWorldStep
-        action: ExecuteBash
-        inputs:
-          commands:
-            - echo 'Hello World from the test phase.'
+            - pandoc --version
+            - tmux --version

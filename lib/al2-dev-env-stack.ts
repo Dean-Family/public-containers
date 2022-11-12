@@ -172,9 +172,11 @@ export class Al2DevEnvStack extends cdk.Stack {
           connectionArn: config.connectionArn
         }),
         commands: [
+          "curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/aws-cloudformation/cloudformation-guard/main/install-guard.sh | sh",
           "npm ci",
           "npm run build",
-          "npx cdk synth"
+          "npx cdk synth",
+          "cfn-guard validate --data cdk.out/ --rules /rules"
         ]
       })
     })
